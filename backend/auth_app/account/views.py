@@ -27,7 +27,6 @@ class RegisterView(APIView):
         email = data.get('email')
         password = data.get('password')
         repass = data.get('repass', '')
-        breakpoint()
         messages = {'errors': []}
 
         if first_name == None:
@@ -38,6 +37,8 @@ class RegisterView(APIView):
             messages['errors'].append('Email can\'t be empty')
         if password == None:
             messages['errors'].append('Password can\'t be empty')
+        if password != repass:
+            messages['errors'].append('Password doen\'t match')
         if CustomUser.objects.filter(email=email).exists():
             messages['errors'].append(
                 "Account already exists with this email id.")
@@ -115,3 +116,4 @@ class UserViewSet(ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
+

@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-mv7dt_^*1zbiwcqu6=5fuoy^=gohfw9y122u1qv)h-w-o1tgd%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account',
+
     'rest_framework',  # https://www.django-rest-framework.org/
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -57,11 +58,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'auth_app.urls'
 AUTH_USER_MODEL = "account.CustomUser"
-
+INTERNAL_IPS = [
+    # ...
+    '127.0.0.1',
+    # ...
+]
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -110,7 +117,7 @@ SIMPLE_JWT = {
 }
 
 
-# ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'auth_app.urls'
 
 TEMPLATES = [
     {

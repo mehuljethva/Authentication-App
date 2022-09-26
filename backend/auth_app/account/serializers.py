@@ -7,6 +7,8 @@ class UserSerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
     avatarUrl = serializers.ImageField(read_only=True)
     name = serializers.SerializerMethodField(read_only=True)
+    first_name = serializers.CharField(read_only=True)
+    last_name = serializers.CharField(read_only=True)
     isVerified = serializers.BooleanField(read_only=True)
     status = serializers.CharField(read_only=True)
     role = serializers.CharField(read_only=True)
