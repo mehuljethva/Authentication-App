@@ -6,7 +6,7 @@ import Page from '../components/Page';
 
 export default function DashboardApp() {
   return (
-    <Page title="Dashboard">![](C:/Users/mehul/AppData/Local/Temp/download.jpg)
+    <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi, Welcome 👋
