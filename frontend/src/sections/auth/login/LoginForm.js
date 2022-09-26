@@ -117,7 +117,7 @@ export default function LoginForm() {
           type="submit"
           variant="contained"
           color={"error"}
-          loading={loginLoading ? isSubmitting : null}
+          // loading={loginLoading ? isSubmitting : null}
         >
           Login with Google
         </LoadingButton></Stack>

@@ -200,7 +200,7 @@ const { errors, touched, values, handleSubmit, isSubmitting, getFieldProps } = f
             variant="contained"
             loading={registerLoading ? isSubmitting : null}
           >
-            Register
+            Update
           </LoadingButton>
         </Stack>
       </Form>
