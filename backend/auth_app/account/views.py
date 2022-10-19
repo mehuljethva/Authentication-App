@@ -7,12 +7,13 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
-from .models import CustomUser
-from .serializers import UserSerializer, UserSerializerWithToken
+from .models import CustomUser, Todos
+from .serializers import UserSerializer, UserSerializerWithToken, TodoSerializer
 
 
 class RegisterView(APIView):
@@ -117,3 +118,12 @@ class UserViewSet(ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
 
+
+class TodoViewSet(viewsets.ModelViewSet):
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer
+
+    # def get_queryset(self):
+    #     if self.request.query_params['status']=='NEW':
+    #         return self.queryset.filter(status='new')
+    #     return self.queryset.none()

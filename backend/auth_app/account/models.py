@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.models import UnicodeUsernameValidator
 from django.core.validators import MinLengthValidator
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext as _
 import uuid
 
@@ -20,6 +21,8 @@ STATUS_CHOICES = (
 
     ('active', 'ACTIVE'),
     ('banned', 'BANNED'),
+    ('completed', 'COMPLETED'),
+    ('new', 'NEW'),
 )
 
 
@@ -76,3 +79,13 @@ class CustomUser(AbstractUser):
 
     class Meta:
         ordering = ["-id"]
+
+
+class Todos(models.Model):
+    created_timestamp = models.DateTimeField(default=timezone.now())
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    status = models.CharField(
+        max_length=100, choices=STATUS_CHOICES, default='new')
+    is_delete = models.BooleanField(default=False)
