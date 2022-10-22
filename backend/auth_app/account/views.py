@@ -14,6 +14,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from .models import CustomUser, Todos
 from .serializers import UserSerializer, UserSerializerWithToken, TodoSerializer
+from rest_framework.decorators import action
 
 
 class RegisterView(APIView):
@@ -127,3 +128,20 @@ class TodoViewSet(viewsets.ModelViewSet):
     #     if self.request.query_params['status']=='NEW':
     #         return self.queryset.filter(status='new')
     #     return self.queryset.none()
+
+    @action(detail=False, methods=['post'])
+    def update_data(self, *args, **kwargs):
+        obj_id = self.request.data.get('id')
+        todo_obj = self.queryset.get(id=obj_id)
+        if self.request.data.get('is_delete', ''):
+            todo_obj.is_delete = True
+        if self.request.data.get('title', ''):
+            todo_obj.title = self.request.data.get('title')
+        if self.request.data.get('description', ''):
+            todo_obj.description = self.request.data.get('description')
+        if self.request.data.get('status', ''):
+            todo_obj.status = self.request.data.get('status')
+
+        todo_obj.save()
+        return Response("Updated Successfully", status.HTTP_200_OK)
+
