@@ -7,12 +7,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
-from .models import CustomUser
-from .serializers import UserSerializer, UserSerializerWithToken
+from .models import CustomUser, Todos
+from .serializers import UserSerializer, UserSerializerWithToken, TodoSerializer
+from rest_framework.decorators import action
 
 
 class RegisterView(APIView):
@@ -116,4 +118,30 @@ class UserViewSet(ReadOnlyModelViewSet):
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+class TodoViewSet(viewsets.ModelViewSet):
+    queryset = Todos.objects.all()
+    serializer_class = TodoSerializer
+
+    # def get_queryset(self):
+    #     if self.request.query_params['status']=='NEW':
+    #         return self.queryset.filter(status='new')
+    #     return self.queryset.none()
+
+    @action(detail=False, methods=['post'])
+    def update_data(self, *args, **kwargs):
+        obj_id = self.request.data.get('id')
+        todo_obj = self.queryset.get(id=obj_id)
+        if self.request.data.get('is_delete', ''):
+            todo_obj.is_delete = True
+        if self.request.data.get('title', ''):
+            todo_obj.title = self.request.data.get('title')
+        if self.request.data.get('description', ''):
+            todo_obj.description = self.request.data.get('description')
+        if self.request.data.get('status', ''):
+            todo_obj.status = self.request.data.get('status')
+
+        todo_obj.save()
+        return Response("Updated Successfully", status.HTTP_200_OK)
 

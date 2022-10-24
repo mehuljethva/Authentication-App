@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from .models import Todos
 
 class UserSerializer(serializers.Serializer):
     id = serializers.UUIDField(read_only=True)
@@ -30,3 +30,8 @@ class UserSerializerWithToken(UserSerializer):
     def get_refresh(self, obj):
         token = RefreshToken.for_user(obj)
         return str(token)
+
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todos
+        fields = '__all__'
